@@ -20,9 +20,13 @@ export default function PhonebookForm(props) {
   const [kelurahan, setKelurahan] = useState(null);
   const dispatch = useDispatch();
   const [user, setUser] = useState({
-    name: '',
-    phone: '',
+    firstname: '',
+    lastname: '',
     biodata: '',
+    provinsi: '',
+    kota: '',
+    kelurahan: '',
+    kecamatan: '',
   });
 
   const [provinsiData, setProvinsiData] = useState([]);
@@ -128,8 +132,26 @@ export default function PhonebookForm(props) {
   };
 
   const handleSubmit = useCallback(() => {
-    dispatch(create(user.name, user.phone, user.phone));
-    setUser({name: '', phone: ''});
+    dispatch(
+      create(
+        user.firstname,
+        user.lastname,
+        user.biodata,
+        user.provinsi.label,
+        user.kota.label,
+        user.kecamatan.label,
+        user.kelurahan.label,
+      ),
+    );
+    setUser({
+      firstname: '',
+      lastname: '',
+      biodata: '',
+      provinsi: '',
+      kota: '',
+      kecamatan: '',
+      kelurahan: '',
+    });
   }, [dispatch, user]);
 
   const handleCencel = () => {
@@ -145,7 +167,7 @@ export default function PhonebookForm(props) {
         <TextInput
           style={styles.input}
           placeholder="First Name"
-          onChangeText={name => setUser({...user, firstname})}
+          onChangeText={firstname => setUser({...user, firstname})}
           defaultValue={user.firstname}
         />
       </View>
@@ -188,12 +210,13 @@ export default function PhonebookForm(props) {
         valueField="value"
         placeholder={!isFocus ? 'Select item' : '...'}
         searchPlaceholder="Search..."
-        value={provinsi}
+        value={user.provinsi}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setProvinsi(item.value);
-          handleState(item.value);
+        onChange={provinsi => {
+          setUser({...user, provinsi});
+          setProvinsi(provinsi.value);
+          handleState(provinsi.value);
           setIsFocus(false);
         }}
       />
@@ -213,12 +236,13 @@ export default function PhonebookForm(props) {
         valueField="value"
         placeholder={!isFocus ? 'Select item' : '...'}
         searchPlaceholder="Search..."
-        value={kota}
+        value={user.kota}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          handleKecamatan(item.value);
-          setKota(item.value);
+        onChange={kota => {
+          setUser({...user, kota});
+          handleKecamatan(kota.value);
+          setKota(kota.value);
           setIsFocus(false);
         }}
       />
@@ -238,12 +262,13 @@ export default function PhonebookForm(props) {
         valueField="value"
         placeholder={!isFocus ? 'Select item' : '...'}
         searchPlaceholder="Search..."
-        value={kecamatan}
+        value={user.kecamatan}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          handleKelurahan(item.value);
-          setKecamatan(item.value);
+        onChange={kecamatan => {
+          setUser({...user, kecamatan});
+          handleKelurahan(kecamatan.value);
+          setKecamatan(kecamatan.value);
           setIsFocus(false);
         }}
       />
@@ -263,11 +288,12 @@ export default function PhonebookForm(props) {
         valueField="value"
         placeholder={!isFocus ? 'Select item' : '...'}
         searchPlaceholder="Search..."
-        value={kelurahan}
+        value={user.kelurahan}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setKelurahan(item.value);
+        onChange={kelurahan => {
+          setUser({...user, kelurahan});
+          setKelurahan(kelurahan.value);
           setIsFocus(false);
         }}
       />
