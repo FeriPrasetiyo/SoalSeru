@@ -13,8 +13,13 @@ import {updateUserAsync} from '../feartures/user/userSlice';
 export default function PhonebookItem(props) {
   const dispatch = useDispatch();
   const [user, setUser] = useState({
-    name: props.user.name,
-    phone: props.user.phone,
+    firstname: props.user.firstname,
+    lastname: props.user.lastname,
+    biodata: props.user.biodata,
+    provinsi: props.user.provinsi,
+    kota: props.user.kota,
+    kecamatan: props.user.kecamatan,
+    kelurahan: props.user.kelurahan,
   });
 
   const [status, setStatus] = useState({
@@ -52,7 +57,7 @@ export default function PhonebookItem(props) {
       <View style={styles.boxedit}>
         <View style={{flexDirection: 'row'}}>
           <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
-            Name
+            First name
           </Text>
           <Text style={status.isEdit ? styles.titikedit : styles.titik}>:</Text>
           {status.isEdit ? (
@@ -63,12 +68,12 @@ export default function PhonebookItem(props) {
               defaultValue={user.name}
             />
           ) : (
-            <Text style={styles.fonttext}>{user.name}</Text>
+            <Text style={styles.fonttext}>{user.firstname}</Text>
           )}
         </View>
         <View style={{flexDirection: 'row'}}>
           <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
-            Phone
+            Last name
           </Text>
           <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
             :
@@ -81,7 +86,97 @@ export default function PhonebookItem(props) {
               defaultValue={user.phone}
             />
           ) : (
-            <Text style={styles.fonttext}>{user.phone}</Text>
+            <Text style={styles.fonttext}>{user.lastname}</Text>
+          )}
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
+            biodata
+          </Text>
+          <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
+            :
+          </Text>
+          {status.isEdit ? (
+            <TextInput
+              style={styles.input}
+              placeholder="Type here to name"
+              onChangeText={phone => setUser({...user, phone})}
+              defaultValue={user.phone}
+            />
+          ) : (
+            <Text style={styles.fonttext}>{user.biodata}</Text>
+          )}
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
+            Provinsi
+          </Text>
+          <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
+            :
+          </Text>
+          {status.isEdit ? (
+            <TextInput
+              style={styles.input}
+              placeholder="Type here to name"
+              onChangeText={phone => setUser({...user, phone})}
+              defaultValue={user.phone}
+            />
+          ) : (
+            <Text style={styles.fonttext}>{user.provinsi}</Text>
+          )}
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
+            Kota
+          </Text>
+          <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
+            :
+          </Text>
+          {status.isEdit ? (
+            <TextInput
+              style={styles.input}
+              placeholder="Type here to name"
+              onChangeText={phone => setUser({...user, phone})}
+              defaultValue={user.phone}
+            />
+          ) : (
+            <Text style={styles.fonttext}>{user.kota}</Text>
+          )}
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
+            Kota
+          </Text>
+          <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
+            :
+          </Text>
+          {status.isEdit ? (
+            <TextInput
+              style={styles.input}
+              placeholder="Type here to name"
+              onChangeText={phone => setUser({...user, phone})}
+              defaultValue={user.phone}
+            />
+          ) : (
+            <Text style={styles.fonttext}>{user.kecamatan}</Text>
+          )}
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
+            Kota
+          </Text>
+          <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
+            :
+          </Text>
+          {status.isEdit ? (
+            <TextInput
+              style={styles.input}
+              placeholder="Type here to name"
+              onChangeText={phone => setUser({...user, phone})}
+              defaultValue={user.phone}
+            />
+          ) : (
+            <Text style={styles.fonttext}>{user.kelurahan}</Text>
           )}
         </View>
       </View>

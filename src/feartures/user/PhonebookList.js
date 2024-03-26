@@ -24,11 +24,6 @@ export default function PhonebookList() {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.name}>Name</Text>
-        <Text style={styles.contact}>Contact </Text>
-        <Text style={styles.action}>Action</Text>
-      </View>
       <View>
         <FlatList
           data={users}

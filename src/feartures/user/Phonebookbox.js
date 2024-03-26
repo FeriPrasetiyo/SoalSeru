@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import PhonebookForm from './PhonebookForm';
 import PhonebookUpload from './PhonebookUpload';
+import PhonebookList from './PhonebookList';
 
 export default function Phonebook(props) {
   const [add, setAdd] = useState({
@@ -41,7 +42,9 @@ export default function Phonebook(props) {
         </TouchableOpacity>
       </View>
       <View>{add.isAdd ? <PhonebookForm /> : <PhonebookUpload />}</View>
-      <View>{/* <PhonebookList /> */}</View>
+      <View>
+        <PhonebookList />
+      </View>
     </View>
   );
 }
