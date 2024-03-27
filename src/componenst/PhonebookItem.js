@@ -52,7 +52,7 @@ export default function PhonebookItem(props) {
   return (
     <View style={styles.container}>
       <View style={styles.iconuser}>
-        <Ionicon name="person-circle" size={50} />
+        {/* <Ionicon name="person-circle" size={50} /> */}
       </View>
       <View style={styles.boxedit}>
         <View style={{flexDirection: 'row'}}>

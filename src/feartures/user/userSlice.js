@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {loadUser, addUser, removeUser, updateUser} from './userAPI';
+import {loadUser, addUser, addCard, removeUser, updateUser} from './userAPI';
 import axios from 'axios';
 
 const request = axios.create({
@@ -13,6 +13,7 @@ const initialState = {
       page: 1,
       pages: 1,
     },
+    card: [],
   },
   status: 'idle',
 };
@@ -56,10 +57,10 @@ export const addUserAsync = createAsyncThunk(
 );
 
 export const addCardAsync = createAsyncThunk(
-  'user/addUser',
+  'user/addCard',
   async ({id, nik, imageUri}) => {
     try {
-      const response = await addUser(nik, imageUri);
+      const response = await addCard(nik, imageUri);
       return {succses: true, id, user: response.data.data};
     } catch (err) {
       return {succses: false, id};
@@ -117,6 +118,18 @@ export const userSlice = createSlice({
             kecamatan: action.payload.kecamatan,
             kelurahan: action.payload.kelurahan,
             sent: true,
+          },
+        ],
+      };
+    },
+    card: (state, action) => {
+      state.value = {
+        ...state.value,
+        card: [
+          ...state.value.card,
+          {
+            nik: action.payload.nik,
+            firstname: action.payload.imageUri,
           },
         ],
       };
@@ -208,6 +221,37 @@ export const userSlice = createSlice({
           };
         }
       })
+      .addCase(addCardAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        if (action.payload.succses) {
+          state.value = {
+            ...state.value,
+            card: [
+              ...state.value.card.map(item => {
+                if (item.id === action.payload.id) {
+                  return {
+                    id: action.payload.user.id,
+                    nik: action.payload.user.nik,
+                    imageUri: action.payload.user.imageUri,
+                    sent: true,
+                  };
+                }
+                return item;
+              }),
+            ],
+          };
+        } else {
+          state.value = {
+            ...state.value,
+            card: state.value.card.map(item => {
+              if (item.id === action.payload.id) {
+                return {...item, sent: false};
+              }
+              return item;
+            }),
+          };
+        }
+      })
       .addCase(updateUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         if (action.payload.succses) {
@@ -236,7 +280,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const {add, edit, loadPage, search} = userSlice.actions;
+export const {add, card, edit, loadPage, search} = userSlice.actions;
 
 export const selectUser = state => state.user.value.users;
 
@@ -256,20 +300,36 @@ export const create =
         kelurahan,
       }),
     );
-    dispatch(addUserAsync({id, firstname, lastname, biodata}));
+    dispatch(
+      addUserAsync({
+        id,
+        firstname,
+        lastname,
+        biodata,
+        provinsi,
+        kota,
+        kecamatan,
+        kelurahan,
+      }),
+    );
   };
 
-export const createcard = (nik, imageUri) => (dispatch, getState) => {
-  console.log(nik, imageUri);
+export const createCard = (nik, imageUri) => (dispatch, getState) => {
   const id = Date.now();
   dispatch(
-    add({
+    card({
       id,
       nik,
       imageUri,
     }),
   );
-  dispatch(addCardAsync({id, nik, imageUri}));
+  dispatch(
+    addCardAsync({
+      id,
+      nik,
+      imageUri,
+    }),
+  );
 };
 
 export const update = (name, phone) => (dispatch, getState) => {

@@ -5,6 +5,11 @@ const request = axios.create({
 });
 
 export const loadUser = () => request.get('users', {params: {page: 1}});
+export const addCard = (Nik, imageUri) =>
+  request.post('users', {
+    Nik,
+    imageUri,
+  });
 
 export const addUser = (
   firstname,

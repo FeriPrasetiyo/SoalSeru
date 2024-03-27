@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {createcard} from './userSlice';
+import {createCard} from './userSlice';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export default function PhonebookForm(props) {
@@ -24,21 +24,12 @@ export default function PhonebookForm(props) {
   };
 
   const handleSubmit = useCallback(() => {
-    dispatch(createcard(userNik.nik, userNik.imageUri));
+    dispatch(createCard(userNik.nik, userNik.imageUri));
     setUsernik({
       nik: '',
       imageUri: '',
     });
   }, [dispatch, userNik]);
-
-  // const handleSubmit = useCallback(
-  //   event => {
-  //     event.preventDefault();
-  //     dispatch(searchUser({nik: userNik.nik, photo: userNik.imageUri}));
-  //     setUsernik({nik: '', selectedImage: ''});
-  //   },
-  //   [dispatch, userNik],
-  // );
 
   const openImagePicker = () => {
     const options = {
