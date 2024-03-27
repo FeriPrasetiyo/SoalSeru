@@ -1,8 +1,7 @@
-// import * as FileSystem from 'expo-file-system';
-// import * as imagePicker from 'expo-image-picker';
 import {useCallback, useState} from 'react';
 import {
   Button,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -11,35 +10,14 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {searchUser} from './userSlice';
-
-// const imgDir = FileSystem.documentDirectory;
-// +'image/';
-
-// const ensureDirExists = async () => {
-//   const dirInfo = await FileSystem.getInfoAsync(imgDir);
-//   if (!dirInfo.exists) {
-//     await FileSystem.makeDirectoryAsync(imgDir, {intermediates: true});
-//   }
-// };
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export default function PhonebookForm(props) {
   const dispatch = useDispatch();
+  const [selectedImage, setSelectedImage] = useState(null);
   const [userNik, setUsernik] = useState({
     nik: '',
   });
-
-  // const selectImages = async Use => {
-  //   const result = await imagePicker.launchCameraAsync({
-  //     mediaTypes: imagePicker.MediaTypeOptions.Images,
-  //   });
-
-  //   if (!result.cenceled) {
-  //     await FileSystem.copyAsync({
-  //       from: result.uri,
-  //       to: imgDir + result.uri.split('/').pop(),
-  //     });
-  //   }
-  // };
 
   const handleCencel = () => {
     setUsernik({nik: ''});
@@ -48,22 +26,76 @@ export default function PhonebookForm(props) {
   const handleSubmit = useCallback(
     event => {
       event.preventDefault();
-      dispatch(searchUser({nik: user.nik}));
+      dispatch(searchUser({nik: userNik.nik}));
       setUsernik({nik: ''});
     },
     [dispatch, userNik],
   );
 
+  const openImagePicker = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setSelectedImage(imageUri);
+      }
+    });
+  };
+
+  const handleCameraLaunch = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchCamera(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.error) {
+        console.log('Camera Error: ', response.error);
+      } else {
+        // Process the captured image
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setSelectedImage(imageUri);
+        console.log(imageUri);
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '100px',
+        }}>
+        <Image
+          style={{width: 150, height: 150}}
+          source={{uri: selectedImage}}
+        />
+      </View>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-evenly',
           marginVertical: 20,
         }}>
-        <Button title="Photo Library" onPress={() => selectImage(true)} />
-        <Button title="Capture Image" onPress={() => selectImage(false)} />
+        <Button title="Photo Library" onPress={openImagePicker} />
+        <Button title="Capture Image" onPress={handleCameraLaunch} />
       </View>
       <View>
         <Text style={styles.text}>Nik</Text>
