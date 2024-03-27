@@ -28,9 +28,38 @@ export const loadUserAsync = createAsyncThunk('user/loadUser', async () => {
 
 export const addUserAsync = createAsyncThunk(
   'user/addUser',
-  async ({id, firstname, lastname, biodata}) => {
+  async ({
+    id,
+    firstname,
+    lastname,
+    biodata,
+    provinsi,
+    kota,
+    kecamatan,
+    kelurahan,
+  }) => {
     try {
-      const response = await addUser(firstname, lastname, biodata);
+      const response = await addUser(
+        firstname,
+        lastname,
+        biodata,
+        provinsi,
+        kota,
+        kecamatan,
+        kelurahan,
+      );
+      return {succses: true, id, user: response.data.data};
+    } catch (err) {
+      return {succses: false, id};
+    }
+  },
+);
+
+export const addCardAsync = createAsyncThunk(
+  'user/addUser',
+  async ({id, nik, imageUri}) => {
+    try {
+      const response = await addUser(nik, imageUri);
       return {succses: true, id, user: response.data.data};
     } catch (err) {
       return {succses: false, id};
@@ -230,6 +259,19 @@ export const create =
     dispatch(addUserAsync({id, firstname, lastname, biodata}));
   };
 
+export const createcard = (nik, imageUri) => (dispatch, getState) => {
+  console.log(nik, imageUri);
+  const id = Date.now();
+  dispatch(
+    add({
+      id,
+      nik,
+      imageUri,
+    }),
+  );
+  dispatch(addCardAsync({id, nik, imageUri}));
+};
+
 export const update = (name, phone) => (dispatch, getState) => {
   const id = Date.now();
   dispatch(edit({id, name, phone}));
@@ -265,6 +307,7 @@ export const loadmore = () => async (dispatch, getSate) => {
 export const searchUser = query => async (dispatch, getState) => {
   try {
     let state = getState();
+    console.log(state.user.value);
     let params = {
       ...state.user.value.params,
       ...query,

@@ -145,7 +145,7 @@ export default function PhonebookItem(props) {
         </View>
         <View style={{flexDirection: 'row'}}>
           <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
-            Kota
+            kecamatan
           </Text>
           <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
             :
@@ -163,7 +163,7 @@ export default function PhonebookItem(props) {
         </View>
         <View style={{flexDirection: 'row'}}>
           <Text style={status.isEdit ? styles.fonttextedit : styles.fonttext}>
-            Kota
+            kelurahan
           </Text>
           <Text style={status.isEdit ? styles.titikedit : styles.titikphone}>
             :

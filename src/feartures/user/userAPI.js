@@ -6,7 +6,24 @@ const request = axios.create({
 
 export const loadUser = () => request.get('users', {params: {page: 1}});
 
-export const addUser = (name, phone) => request.post('users', {name, phone});
+export const addUser = (
+  firstname,
+  lastname,
+  biodata,
+  provinsi,
+  kota,
+  kelurahan,
+  kecamatan,
+) =>
+  request.post('users', {
+    firstname,
+    lastname,
+    biodata,
+    provinsi,
+    kota,
+    kelurahan,
+    kecamatan,
+  });
 
 export const updateUser = (id, name, phone) =>
   request.put(`users/${id}`, {name, phone});

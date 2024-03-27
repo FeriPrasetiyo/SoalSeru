@@ -9,28 +9,36 @@ import {
   View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {searchUser} from './userSlice';
+import {createcard} from './userSlice';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export default function PhonebookForm(props) {
   const dispatch = useDispatch();
-  const [selectedImage, setSelectedImage] = useState(null);
   const [userNik, setUsernik] = useState({
     nik: '',
+    imageUri: '',
   });
 
   const handleCencel = () => {
-    setUsernik({nik: ''});
+    setUsernik({nik: '', imageUri: ''});
   };
 
-  const handleSubmit = useCallback(
-    event => {
-      event.preventDefault();
-      dispatch(searchUser({nik: userNik.nik}));
-      setUsernik({nik: ''});
-    },
-    [dispatch, userNik],
-  );
+  const handleSubmit = useCallback(() => {
+    dispatch(createcard(userNik.nik, userNik.imageUri));
+    setUsernik({
+      nik: '',
+      imageUri: '',
+    });
+  }, [dispatch, userNik]);
+
+  // const handleSubmit = useCallback(
+  //   event => {
+  //     event.preventDefault();
+  //     dispatch(searchUser({nik: userNik.nik, photo: userNik.imageUri}));
+  //     setUsernik({nik: '', selectedImage: ''});
+  //   },
+  //   [dispatch, userNik],
+  // );
 
   const openImagePicker = () => {
     const options = {
@@ -47,7 +55,7 @@ export default function PhonebookForm(props) {
         console.log('Image picker error: ', response.error);
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
-        setSelectedImage(imageUri);
+        setUsernik({...userNik, imageUri});
       }
     });
   };
@@ -61,7 +69,6 @@ export default function PhonebookForm(props) {
     };
 
     launchCamera(options, response => {
-      console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled camera');
       } else if (response.error) {
@@ -69,8 +76,7 @@ export default function PhonebookForm(props) {
       } else {
         // Process the captured image
         let imageUri = response.uri || response.assets?.[0]?.uri;
-        setSelectedImage(imageUri);
-        console.log(imageUri);
+        setUsernik({...userNik, imageUri});
       }
     });
   };
@@ -83,10 +89,12 @@ export default function PhonebookForm(props) {
           alignItems: 'center',
           padding: '100px',
         }}>
-        <Image
-          style={{width: 150, height: 150}}
-          source={{uri: selectedImage}}
-        />
+        {userNik.imageUri !== '' ? (
+          <Image
+            source={{uri: userNik.imageUri}}
+            style={{width: 150, height: 150}}
+          />
+        ) : null}
       </View>
       <View
         style={{
